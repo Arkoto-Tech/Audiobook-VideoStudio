@@ -1,0 +1,15 @@
+# Optional NVIDIA GPU overlay (Linux host with nvidia-container-toolkit).
+#
+#   docker compose -f docker/docker-compose.yml -f docker/docker-compose.gpu.yml up --build
+#
+# Windows/macOS Docker Desktop generally cannot pass GPU into Linux containers.
+
+services:
+  audiobook-studio:
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
