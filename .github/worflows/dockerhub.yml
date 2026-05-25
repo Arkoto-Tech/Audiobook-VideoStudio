@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 env:
-  IMAGE_NAME: arkototech/audiobook-videostudio
+  IMAGE_NAME: arkoto123/audiobook-videostudio
 
 jobs:
   docker:
