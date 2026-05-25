@@ -5,7 +5,7 @@ services:
   audiobook-studio:
     build:
       # Points directly to the GitHub repository and branch
-      context: https://github.com/Arkoto-Tech/Audiobook-Studio-2.0-Beta1.git#main
+      context: https://github.com/Arkoto-Tech/Audiobook-VideoStudio.git#main
       dockerfile: docker/Dockerfile
     image: audiobook-videostudio:latest
     container_name: audiobook-videostudio
