@@ -8,7 +8,7 @@ services:
       context: https://github.com/Arkoto-Tech/Audiobook-Studio-2.0-Beta1.git#main
       dockerfile: docker/Dockerfile
     image: audiobook-videostudio:latest
-    container_name: audiobook-studio
+    container_name: audiobook-videostudio
     ports:
       - "${HOST_PORT:-8501}:8501"
     environment:
