@@ -7,7 +7,7 @@ services:
       # Points directly to the GitHub repository and branch
       context: https://github.com/Arkoto-Tech/Audiobook-Studio-2.0-Beta1.git#main
       dockerfile: docker/Dockerfile
-    image: audiobook-studio:latest
+    image: audiobook-videostudio:latest
     container_name: audiobook-studio
     ports:
       - "${HOST_PORT:-8501}:8501"
