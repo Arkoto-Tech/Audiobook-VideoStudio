@@ -11,8 +11,8 @@ Run the full application in Docker. The image includes Python, FFmpeg, fonts, an
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/YOUR_USER/audiobook-studio.git
-cd audiobook-studio
+git clone https://github.com/Arkoto-Tech/Audiobook-Studio-2.0-Beta1.git
+cd Audiobook-Studio-2.0-Beta1
 
 # 2. Start the app
 cd docker
