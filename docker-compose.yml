@@ -1,13 +1,11 @@
-# Run from the docker/ directory:
+# Run from any directory:
 #   docker compose up --build
-#
-# Or from repository root:
-#   docker compose -f docker/docker-compose.yml up --build
 
 services:
   audiobook-studio:
     build:
-      context: ..
+      # Points directly to the GitHub repository and branch
+      context: https://github.com/Arkoto-Tech/Audiobook-Studio-2.0-Beta1.git#main
       dockerfile: docker/Dockerfile
     image: audiobook-studio:latest
     container_name: audiobook-studio
@@ -17,10 +15,9 @@ services:
       - PYTHONUNBUFFERED=1
       - AUDIOBOOK_STUDIO_DATA=/data
     volumes:
-      # Optional: drop books here for batch workflows / file access
+      # These will map to input/output folders in whatever local directory you run this compose file from
       - ./input:/input
       - ./output:/output
-      # User settings and custom fonts persist across restarts
       - audiobook-studio-data:/data
     restart: unless-stopped
     healthcheck:
