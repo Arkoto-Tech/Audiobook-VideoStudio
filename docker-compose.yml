@@ -1,31 +1,57 @@
-# Run from any directory:
-#   docker compose up --build
-
 services:
-  audiobook-studio:
-    build:
-      # Points directly to the GitHub repository and branch
-      context: https://github.com/Arkoto-Tech/Audiobook-VideoStudio.git#main
-      dockerfile: docker/Dockerfile
-    image: audiobook-videostudio:latest
+  audiobook-videostudio:
+    image: arkoto123/audiobook-videostudio:latest
+
     container_name: audiobook-videostudio
+
     ports:
-      - "${HOST_PORT:-8501}:8501"
+      - "7860:7860"
+
     environment:
-      - PYTHONUNBUFFERED=1
-      - AUDIOBOOK_STUDIO_DATA=/data
+      TZ: America/New_York
+      PYTHONUNBUFFERED: "1"
+      GRADIO_SERVER_NAME: "0.0.0.0"
+
+      # Optional future environment variables
+      MODEL_DIR: /app/models
+      OUTPUT_DIR: /app/output
+      TEMP_DIR: /app/temp
+      CONFIG_DIR: /app/config
+
     volumes:
-      # These will map to input/output folders in whatever local directory you run this compose file from
-      - ./input:/input
-      - ./output:/output
-      - audiobook-studio-data:/data
+      # User uploads / books
+      - ./input:/app/input
+
+      # Final generated audiobooks/videos
+      - ./output:/app/output
+
+      # AI/TTS models cache
+      - ./models:/app/models
+
+      # App configs/settings
+      - ./config:/app/config
+
+      # Temporary rendering/transcoding files
+      - ./temp:/app/temp
+
+      # Optional logs folder
+      - ./logs:/app/logs
+
     restart: unless-stopped
+
+    stdin_open: true
+    tty: true
+
+    # Shared memory helps large AI/video workloads
+    shm_size: "8gb"
+
+    # Optional healthcheck
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8501/_stcore/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:7860"]
       interval: 30s
       timeout: 10s
-      retries: 3
-      start_period: 45s
+      retries: 5
+      start_period: 120s
 
-volumes:
-  audiobook-studio-data:
+    # Better stop handling for ffmpeg/transcoding
+    stop_grace_period: 60s
