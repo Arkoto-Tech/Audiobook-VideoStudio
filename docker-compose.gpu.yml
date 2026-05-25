@@ -1,15 +1,44 @@
-# Optional NVIDIA GPU overlay (Linux host with nvidia-container-toolkit).
-#
-#   docker compose -f docker/docker-compose.yml -f docker/docker-compose.gpu.yml up --build
-#
-# Windows/macOS Docker Desktop generally cannot pass GPU into Linux containers.
-
 services:
-  audiobook-studio:
+  audiobook-videostudio:
+    image: arkoto123/audiobook-videostudio:latest
+
+    container_name: audiobook-videostudio-gpu
+
+    ports:
+      - "7860:7860"
+
+    environment:
+      TZ: America/New_York
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: all
+      GRADIO_SERVER_NAME: "0.0.0.0"
+
+    volumes:
+      - ./input:/app/input
+      - ./output:/app/output
+      - ./models:/app/models
+      - ./config:/app/config
+      - ./temp:/app/temp
+      - ./logs:/app/logs
+
+    shm_size: "16gb"
+
+    stdin_open: true
+    tty: true
+
+    restart: unless-stopped
+
     deploy:
       resources:
         reservations:
           devices:
             - driver: nvidia
-              count: 1
+              count: all
               capabilities: [gpu]
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7860"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
